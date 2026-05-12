@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Anja!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --cream: #FFFDFB;
+            --champagne-gold: #C5A059;
+            --deep-rose: #A67C8E;
+            --soft-pink: #F8E8E8;
+            --charcoal: #333333;
+            --font-header: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --envelope-bg: #f3e5e5;
+            --envelope-flap: #d8b4bc;
+            --heart-red: #d63031;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--charcoal);
+            background-color: var(--cream);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #magic-btn {
+            background: var(--charcoal);
+            color: var(--cream);
+            border: none;
+            padding: 22px 60px;
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 45vh;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        #magic-btn:hover {
+            background: var(--champagne-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(197, 160, 89, 0.4);
+        }
+
+        #birthday-greeting {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 60px 20px;
+            box-sizing: border-box;
+        }
+
+
+        @keyframes bubbleFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            33% { transform: translateY(-10px) scale(1.02); }
+            66% { transform: translateY(5px) scale(0.98); }
+        }
+
+        .photo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            width: 100%;
+            margin-bottom: 80px; 
+            position: relative;
+        }
+
+        .main-birthday-title { font-family: var(--font-header); font-size: clamp(2.5rem, 8vw, 3.5rem); color: var(--champagne-gold); margin: 0; text-align: center; }
+        .princess-subtitle { font-family: var(--font-header); font-style: italic; font-size: clamp(1.1rem, 4vw, 1.5rem); color: var(--deep-rose); margin-bottom: 40px; text-align: center; }
+
+        .photo-bubble { 
+            border-radius: 50%; 
+            border: 2px solid var(--soft-pink); 
+            padding: 10px; 
+            background: white; 
+            overflow: hidden; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+            animation: bubbleFloat 5s ease-in-out infinite;
+        }
+
+        .secondary-photos .photo-bubble:nth-child(even) { animation-delay: 1s; }
+        .secondary-photos .photo-bubble:nth-child(odd) { animation-delay: 2s; }
+
+        .photo-bubble img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .main-img { width: clamp(280px, 80vw, 480px); height: clamp(280px, 80vw, 480px); }
+        .side-img { width: clamp(140px, 40vw, 210px); height: clamp(140px, 40vw, 210px); }
+        .secondary-photos { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+
+
+        @keyframes envelopeShake {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(-2deg); }
+            40% { transform: rotate(2deg); }
+            60% { transform: rotate(-1deg); }
+            80% { transform: rotate(1deg); }
+        }
+
+        .envelope-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin-top: 60px;
+            margin-bottom: 50px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: var(--envelope-bg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 10;
+            animation: envelopeShake 3.5s ease-in-out infinite;
+        }
+
+        .envelope.open { animation: none; }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            bottom: 0; left: 0;
+            z-index: 4;
+            border-top: 100px solid transparent;
+            border-right: 150px solid var(--soft-pink);
+            border-bottom: 100px solid var(--soft-pink);
+            border-left: 150px solid var(--soft-pink);
+        }
+
+        .flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 0; height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid var(--envelope-flap);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+            z-index: 5;
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 90px; left: 135px;
+            width: 30px; height: 30px;
+            background-color: var(--heart-red);
+            transform: rotate(-45deg);
+            z-index: 6;
+            transition: opacity 0.3s ease;
+        }
+        .heart-seal::before, .heart-seal::after { content: ""; position: absolute; width: 30px; height: 30px; background-color: var(--heart-red); border-radius: 50%; }
+        .heart-seal::before { top: -15px; left: 0; }
+        .heart-seal::after { left: 15px; top: 0; }
+
+        .envelope.open .flap { transform: rotateX(180deg); }
+        .envelope.open .heart-seal { opacity: 0; }
+
+        /* --- THE LETTER --- */
+        .letter-container {
+            width: 100%;
+            max-width: 700px;
+            margin-top: 40px;
+            display: none;
+            background: #ffffff !important;
+            padding: clamp(40px, 8vw, 80px) clamp(25px, 6vw, 60px);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.1);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            box-sizing: border-box;
+        }
+
+        .letter-container.show { display: block; opacity: 1; transform: translateY(0); }
+        .salutation { font-family: var(--font-header); font-size: clamp(1.8rem, 5vw, 2.4rem); color: var(--champagne-gold); display: block; margin-bottom: 30px; }
+        .letter-body { font-size: clamp(1.1rem, 3.8vw, 1.3rem); line-height: 1.9; color: #444; margin-bottom: 50px; }
+        .signature-wrap { border-top: 1px solid var(--soft-pink); padding-top: 30px; }
+        .kuya-sweet { font-family: var(--font-header); font-style: italic; font-size: clamp(2rem, 7vw, 2.8rem); color: var(--champagne-gold); display: block; margin-top: 10px; }
+
+
+        .footer-logo-wrap {
+            margin-top: 10px; 
+            padding-bottom: 20px; 
+            text-align: center;
+            width: 100%;
+        }
+
+        .logo-color-fix {
+            width: 50px;
+            filter: brightness(0) saturate(100%) invert(67%) sepia(19%) saturate(898%) hue-rotate(1deg) brightness(91%) contrast(83%);
+        }
+    </style>
+</head>
+<body>
+
+    <button id="magic-btn" onclick="startMagic()">Open with Love</button>
+
+    <div id="birthday-greeting">
+        <div class="photo-container">
+            <h1 class="main-birthday-title">Happy Birthday</h1>
+            <div class="princess-subtitle">Our Nordic Princess</div>
+            <div class="photo-bubble main-img"><img src="IMG1.jpg" alt="Anja"></div>
+            <div class="secondary-photos">
+                <div class="photo-bubble side-img"><img src="IMG2.jpg"></div>
+                <div class="photo-bubble side-img"><img src="IMG3.jpg"></div>
+                <div class="photo-bubble side-img"><img src="IMG4.jpg"></div>
+                <div class="photo-bubble side-img"><img src="IMG5.jpg"></div>
+            </div>
+        </div>
+
+        <div class="envelope-section">
+            <div class="envelope" id="envelope" onclick="toggleLetter()">
+                <div class="flap"></div>
+                <div class="heart-seal"></div>
+            </div>
+
+            <div class="letter-container" id="letter">
+                <span class="salutation">Dearest Anja,</span>
+                <div class="letter-body">
+                    Happy Birthday to our little princess! Even though we can’t see each other as often as we'd like, and your family here in the Philippines isn't by your side as you grow, I want you to know that you are deeply loved and always cared for.
+                    <br><br>
+                    I hope your day is just as magical and sweet as you are. Keep shining bright, little one, and always remember how much we care for you.
+                </div>
+                <div class="signature-wrap">
+                    <p style="color:#888; font-size:0.9rem; text-transform:uppercase; letter-spacing: 2px; margin: 0;">With all my love,</p>
+                    <span class="kuya-sweet">Kuya Sweet</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-logo-wrap">
+            <img src="Logo.png" alt="GoBooth Logo" class="logo-color-fix">
+        </div>
+    </div>
+
+    <script>
+        function startMagic() {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#C5A059', '#A67C8E', '#FFFFFF'] });
+            document.getElementById('magic-btn').style.display = 'none';
+            document.getElementById('birthday-greeting').style.display = 'flex';
+        }
+
+        function toggleLetter() {
+            const env = document.getElementById('envelope');
+            const letter = document.getElementById('letter');
+            const isOpen = env.classList.contains('open');
+
+            if (!isOpen) {
+                env.classList.add('open');
+                letter.style.display = 'block';
+                setTimeout(() => {
+                    letter.classList.add('show');
+                    letter.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 }, colors: ['#F8E8E8', '#A67C8E'] });
+                }, 100);
+            } else {
+                env.classList.remove('open');
+                letter.classList.remove('show');
+                setTimeout(() => {
+                    letter.style.display = 'none';
+                    env.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 600);
+            }
+        }
+    </script>
+</body>
+</html>
